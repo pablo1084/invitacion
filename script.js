@@ -4,11 +4,12 @@ const openButton = document.querySelector('#openButton');
 const closeButton = document.querySelector('#closeButton');
 const soundButton = document.querySelector('#soundButton');
 const sparkles = document.querySelector('#sparkles');
+const backgroundMusic = document.querySelector('#backgroundMusic');
 
-let audioContext;
-let masterGain;
 let muted = false;
 let endTimer;
+let musicTimer;
+const MUSIC_DURATION = 30_000;
 
 function createSparkles() {
   if (sparkles.children.length) return;
@@ -25,25 +26,14 @@ function createSparkles() {
   }
 }
 
-function startAmbientSound() {
-  audioContext = audioContext || new (window.AudioContext || window.webkitAudioContext)();
-  masterGain = audioContext.createGain();
-  masterGain.gain.setValueAtTime(muted ? 0 : 0.12, audioContext.currentTime);
-  masterGain.connect(audioContext.destination);
+function startMusic() {
+  backgroundMusic.pause();
+  backgroundMusic.currentTime = 0;
+  backgroundMusic.volume = 0.6;
+  backgroundMusic.muted = muted;
 
-  const notes = [130.81, 196, 261.63, 329.63, 392, 329.63, 261.63, 196];
-  notes.forEach((frequency, index) => {
-    const oscillator = audioContext.createOscillator();
-    const gain = audioContext.createGain();
-    oscillator.type = 'sine';
-    oscillator.frequency.value = frequency;
-    const start = audioContext.currentTime + index * 3;
-    gain.gain.setValueAtTime(0, start);
-    gain.gain.linearRampToValueAtTime(.35, start + 1.1);
-    gain.gain.exponentialRampToValueAtTime(.001, start + 4.2);
-    oscillator.connect(gain).connect(masterGain);
-    oscillator.start(start);
-    oscillator.stop(start + 4.3);
+  backgroundMusic.play().catch((error) => {
+    console.warn('No se pudo reproducir public/audio/musica.mp3.', error);
   });
 }
 
@@ -53,17 +43,23 @@ function openInvitation() {
   void invitation.offsetWidth;
   invitation.classList.add('playing');
   film.setAttribute('aria-hidden', 'false');
-  startAmbientSound();
+  startMusic();
   clearTimeout(endTimer);
+  clearTimeout(musicTimer);
   endTimer = setTimeout(() => closeButton.focus(), 25000);
+  musicTimer = setTimeout(() => {
+    backgroundMusic.pause();
+    backgroundMusic.currentTime = 0;
+  }, MUSIC_DURATION);
 }
 
 function closeInvitation() {
   invitation.classList.remove('playing');
   film.setAttribute('aria-hidden', 'true');
   clearTimeout(endTimer);
-  if (audioContext) audioContext.close();
-  audioContext = null;
+  clearTimeout(musicTimer);
+  backgroundMusic.pause();
+  backgroundMusic.currentTime = 0;
   openButton.focus();
 }
 
@@ -71,8 +67,11 @@ openButton.addEventListener('click', openInvitation);
 closeButton.addEventListener('click', closeInvitation);
 soundButton.addEventListener('click', () => {
   muted = !muted;
-  if (masterGain && audioContext) masterGain.gain.setTargetAtTime(muted ? 0 : .12, audioContext.currentTime, .08);
+  backgroundMusic.muted = muted;
   soundButton.textContent = muted ? '×' : '♪';
   soundButton.setAttribute('aria-label', muted ? 'Activar sonido' : 'Silenciar sonido');
 });
-document.addEventListener('keydown', (event) => { if (event.key === 'Escape' && invitation.classList.contains('playing')) closeInvitation(); });
+
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape' && invitation.classList.contains('playing')) closeInvitation();
+});
