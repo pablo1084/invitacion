@@ -859,6 +859,18 @@ h1 em {
     }
 }
 
+/*
+ * Encuadre vertical: prioriza el sector derecho de la fotografía para que las
+ * dos velas permanezcan visibles incluso en pantallas 19.5:9 y 20:9.
+ */
+@media (orientation: portrait) and (max-width: 900px) {
+    .artwork {
+        right: -2vw;
+        left: auto;
+        transform: translateY(-65%);
+    }
+}
+
 @media (min-width: 601px) and (max-width: 650px) {
    
     .candle-left {
