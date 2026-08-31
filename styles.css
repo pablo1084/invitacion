@@ -1042,43 +1042,8 @@ h1 em {
 }
 
 @media (prefers-reduced-motion:reduce) {
-    .backdrop {
+    .invitation:not(.playing) .backdrop {
         animation: none;
-    }
-
-    .living-candle,
-    .living-candle::before,
-    .living-candle i {
-        animation: none;
-    }
-
-    .playing .scene {
-        animation: none;
-        opacity: 0;
-    }
-
-    .playing .scene-4 {
-        opacity: 1;
-    }
-
-    .playing .progress span {
-        animation: none;
-        width: 100%;
-    }
-
-    .playing .light-show * {
-        animation: none;
-        opacity: 0;
-    }
-
-    .candle-left {
-        left: 84%;
-        top: 60.5%;
-    }
-
-    .candle-right {
-        left: 94.1%;
-        top: 63%;
     }
 }
 
