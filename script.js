@@ -28,7 +28,7 @@ function createSparkles() {
 function startAmbientSound() {
   audioContext = audioContext || new (window.AudioContext || window.webkitAudioContext)();
   masterGain = audioContext.createGain();
-  masterGain.gain.setValueAtTime(muted ? 0 : 0.055, audioContext.currentTime);
+  masterGain.gain.setValueAtTime(muted ? 0 : 0.12, audioContext.currentTime);
   masterGain.connect(audioContext.destination);
 
   const notes = [130.81, 196, 261.63, 329.63, 392, 329.63, 261.63, 196];
@@ -71,7 +71,7 @@ openButton.addEventListener('click', openInvitation);
 closeButton.addEventListener('click', closeInvitation);
 soundButton.addEventListener('click', () => {
   muted = !muted;
-  if (masterGain && audioContext) masterGain.gain.setTargetAtTime(muted ? 0 : .055, audioContext.currentTime, .08);
+  if (masterGain && audioContext) masterGain.gain.setTargetAtTime(muted ? 0 : .12, audioContext.currentTime, .08);
   soundButton.textContent = muted ? '×' : '♪';
   soundButton.setAttribute('aria-label', muted ? 'Activar sonido' : 'Silenciar sonido');
 });
