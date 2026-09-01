@@ -422,15 +422,15 @@ h1 em {
 }
 
 .playing .flash-1 {
-    animation: cameraFlash 1.2s 5.25s ease-out both;
+    animation: cameraFlash 1.2s 7.05s ease-out both;
 }
 
 .playing .flash-2 {
-    animation: cameraFlash 1.2s 10.65s ease-out both;
+    animation: cameraFlash 1.2s 14.25s ease-out both;
 }
 
 .playing .flash-3 {
-    animation: cameraFlash 1.35s 16.85s ease-out both;
+    animation: cameraFlash 1.35s 20.45s ease-out both;
 }
 
 .sparkles {
@@ -506,19 +506,19 @@ h1 em {
 }
 
 .playing .scene-1 {
-    animation: scene 6s ease both;
+    animation: scene 8s ease both;
 }
 
 .playing .scene-2 {
-    animation: scene 6s 5.4s ease both;
+    animation: scene 8s 7.2s ease both;
 }
 
 .playing .scene-3 {
-    animation: scene 7s 10.8s ease both;
+    animation: scene 7s 14.4s ease both;
 }
 
 .playing .scene-4 {
-    animation: lastScene 8s 17s ease both;
+    animation: lastScene 8s 20.6s ease both;
 }
 
 .icon-button {
