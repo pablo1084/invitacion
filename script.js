@@ -7,9 +7,10 @@ const sparkles = document.querySelector('#sparkles');
 const backgroundMusic = document.querySelector('#backgroundMusic');
 
 let muted = false;
-let endTimer;
 let musicTimer;
-const MUSIC_DURATION = 30_000;
+let currentMusicCycle = 0;
+const MUSIC_FRAGMENT_DURATION = 30_000;
+const TOTAL_MUSIC_CYCLES = 3;
 
 function createSparkles() {
   if (sparkles.children.length) return;
@@ -37,27 +38,38 @@ function startMusic() {
   });
 }
 
+function startMusicCycle() {
+  currentMusicCycle += 1;
+  startMusic();
+
+  clearTimeout(musicTimer);
+  musicTimer = setTimeout(() => {
+    if (currentMusicCycle < TOTAL_MUSIC_CYCLES) {
+      startMusicCycle();
+      return;
+    }
+
+    backgroundMusic.pause();
+    backgroundMusic.currentTime = 0;
+  }, MUSIC_FRAGMENT_DURATION);
+}
+
 function openInvitation() {
   createSparkles();
+  clearTimeout(musicTimer);
+  currentMusicCycle = 0;
   invitation.classList.remove('playing');
   void invitation.offsetWidth;
   invitation.classList.add('playing');
   film.setAttribute('aria-hidden', 'false');
-  startMusic();
-  clearTimeout(endTimer);
-  clearTimeout(musicTimer);
-  endTimer = setTimeout(() => closeButton.focus(), 25000);
-  musicTimer = setTimeout(() => {
-    backgroundMusic.pause();
-    backgroundMusic.currentTime = 0;
-  }, MUSIC_DURATION);
+  startMusicCycle();
 }
 
 function closeInvitation() {
   invitation.classList.remove('playing');
   film.setAttribute('aria-hidden', 'true');
-  clearTimeout(endTimer);
   clearTimeout(musicTimer);
+  currentMusicCycle = 0;
   backgroundMusic.pause();
   backgroundMusic.currentTime = 0;
   openButton.focus();
